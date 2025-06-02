@@ -62,6 +62,15 @@ bool UAUAchievementsUnlockerComponent::UnlockAchievement( FGameplayTag tag )
         SaveData.UnlockedAchievements.AddUnique( tag );
         ReceiveAchievementUnlocked( tag );
 
+        if ( AllAchievementsUnlockedAchievement != nullptr )
+        {
+            const auto achievement_remaining = GetAchievementsCount() - GetUnlockedAchievementsCount();
+            if ( achievement_remaining == 1 )
+            {
+                UnlockAchievement( AllAchievementsUnlockedAchievement->Tag );
+            }
+        }
+
         return true;
     }
 
@@ -132,6 +141,15 @@ void UAUAchievementsUnlockerComponent::BeginPlay()
         if ( auto * data_table = settings->AchievementsDataTable.LoadSynchronous() )
         {
             data_table->GetAllRows( TEXT( "" ), AchievementDefinitions );
+
+            for ( const auto & achievement : AchievementDefinitions )
+            {
+                if ( achievement->bUnlockOnAllAchievementsUnlocked )
+                {
+                    AllAchievementsUnlockedAchievement = achievement;
+                    break;
+                }
+            }
         }
 
         bUseOnlineSubSystem = settings->bUseOnlineSubsystem;

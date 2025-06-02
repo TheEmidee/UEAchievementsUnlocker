@@ -33,4 +33,7 @@ struct FAUAchievementUnlockerDefinition final : public FTableRowBase
 
     UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
     TSoftObjectPtr< UTexture2D > LockedTexture;
+
+    UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+    uint8 bUnlockOnAllAchievementsUnlocked : 1;
 };
