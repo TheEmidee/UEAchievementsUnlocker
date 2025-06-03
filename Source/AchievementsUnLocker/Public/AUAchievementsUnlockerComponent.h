@@ -64,8 +64,10 @@ protected:
     UFUNCTION( BlueprintNativeEvent )
     void ReceiveAchievementProgressionUpdated( FGameplayTag tag, int new_progression );
 
+    UPROPERTY()
+    TObjectPtr< FAUAchievementUnlockerDefinition > AllAchievementsUnlockedAchievement;
+
     TArray< FAUAchievementUnlockerDefinition * > AchievementDefinitions;
-    FAUAchievementUnlockerDefinition * AllAchievementsUnlockedAchievement;
     bool bUseOnlineSubSystem;
     FAUAchievementUnlockerSaveData SaveData;
 };
