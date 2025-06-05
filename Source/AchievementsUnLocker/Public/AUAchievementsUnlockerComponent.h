@@ -65,9 +65,11 @@ protected:
     void ReceiveAchievementProgressionUpdated( FGameplayTag tag, int new_progression );
 
     UPROPERTY()
-    TObjectPtr< FAUAchievementUnlockerDefinition > AllAchievementsUnlockedAchievement;
+    FAUAchievementUnlockerDefinition AllAchievementsUnlockedAchievement;
 
-    TArray< FAUAchievementUnlockerDefinition * > AchievementDefinitions;
+    UPROPERTY()
+    TArray< FAUAchievementUnlockerDefinition > AchievementDefinitions;
+
     bool bUseOnlineSubSystem;
     FAUAchievementUnlockerSaveData SaveData;
 };

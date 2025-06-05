@@ -12,6 +12,8 @@ struct FAUAchievementUnlockerDefinition final : public FTableRowBase
 
     FAUAchievementUnlockerDefinition();
 
+    bool IsValid() const;
+
     UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
     FGameplayTag Tag;
 
@@ -37,3 +39,13 @@ struct FAUAchievementUnlockerDefinition final : public FTableRowBase
     UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
     bool bUnlockOnAllAchievementsUnlocked;
 };
+
+FORCEINLINE bool operator==( const FAUAchievementUnlockerDefinition & left, const FAUAchievementUnlockerDefinition & right )
+{
+    return left.Tag == right.Tag;
+}
+
+FORCEINLINE bool operator!=( const FAUAchievementUnlockerDefinition & left, const FAUAchievementUnlockerDefinition & right )
+{
+    return !( left == right );
+}
