@@ -10,7 +10,7 @@ struct FAUAchievementUnlockerDefinition final : public FTableRowBase
 {
     GENERATED_USTRUCT_BODY()
 
-    FAUAchievementUnlockerDefinition() = default;
+    FAUAchievementUnlockerDefinition();
 
     UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
     FGameplayTag Tag;
@@ -33,4 +33,7 @@ struct FAUAchievementUnlockerDefinition final : public FTableRowBase
 
     UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
     TSoftObjectPtr< UTexture2D > LockedTexture;
+
+    UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+    bool bUnlockOnAllAchievementsUnlocked;
 };
