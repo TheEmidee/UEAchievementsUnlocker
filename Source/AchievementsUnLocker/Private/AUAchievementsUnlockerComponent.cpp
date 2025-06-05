@@ -29,11 +29,11 @@ int UAUAchievementsUnlockerComponent::GetAchievementsCount() const
 
 bool UAUAchievementsUnlockerComponent::GetAchievementDefinition( FAUAchievementUnlockerDefinition & definition, FGameplayTag tag ) const
 {
-    if ( auto * matching_achievement_definition = AchievementDefinitions.FindByPredicate( [ & ]( FAUAchievementUnlockerDefinition * achievement_definition ) {
-             return achievement_definition->Tag == tag;
+    if ( auto * matching_achievement_definition = AchievementDefinitions.FindByPredicate( [ & ]( const FAUAchievementUnlockerDefinition & achievement_definition ) {
+             return achievement_definition.Tag == tag;
          } ) )
     {
-        definition = **matching_achievement_definition;
+        definition = *matching_achievement_definition;
         return true;
     }
 
@@ -62,12 +62,12 @@ bool UAUAchievementsUnlockerComponent::UnlockAchievement( FGameplayTag tag )
         SaveData.UnlockedAchievements.AddUnique( tag );
         ReceiveAchievementUnlocked( tag );
 
-        if ( AllAchievementsUnlockedAchievement != nullptr )
+        if ( AllAchievementsUnlockedAchievement.IsValid() )
         {
             const auto achievement_remaining = GetAchievementsCount() - GetUnlockedAchievementsCount();
             if ( achievement_remaining == 1 )
             {
-                UnlockAchievement( AllAchievementsUnlockedAchievement->Tag );
+                UnlockAchievement( AllAchievementsUnlockedAchievement.Tag );
             }
         }
 
@@ -140,14 +140,16 @@ void UAUAchievementsUnlockerComponent::BeginPlay()
     {
         if ( auto * data_table = settings->AchievementsDataTable.LoadSynchronous() )
         {
-            data_table->GetAllRows( TEXT( "" ), AchievementDefinitions );
+            TArray< FAUAchievementUnlockerDefinition * > definitions;
+            data_table->GetAllRows( TEXT( "" ), definitions );
 
-            for ( const auto & achievement : AchievementDefinitions )
+            for ( auto * definition : definitions )
             {
-                if ( achievement->bUnlockOnAllAchievementsUnlocked )
+                AchievementDefinitions.AddUnique( *definition );
+
+                if ( definition->bUnlockOnAllAchievementsUnlocked )
                 {
-                    AllAchievementsUnlockedAchievement = achievement;
-                    break;
+                    AllAchievementsUnlockedAchievement = *definition;
                 }
             }
         }
